@@ -9,8 +9,6 @@ export const validateSignup = async (req, res, next)=>{
     }
     catch(e)
     {
-        console.log('validation is embarassing!!!!');
-        
         badRequest(res, e);
     }
 }

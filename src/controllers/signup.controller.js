@@ -28,11 +28,11 @@ export const signup = async (req, res, next)=>{
                 id: newUserID,
                 isAdmin: false,
             };
-            const token = jwt.sign(payload, process.env.SECRET_KEY);
-            ok(res, token);
+            const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '7d' });
+            ok(res, {token});
         }
         catch(e){
-            serverError(res,e)
+            serverError(res,e);
         }
     })
 

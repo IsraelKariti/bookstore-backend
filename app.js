@@ -17,6 +17,6 @@ app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/books', booksRouter);
 
-app.all('*', (_,res)=>{ 
+app.all('*', (_,res)=>{  
     res.send('not found 404');
 });

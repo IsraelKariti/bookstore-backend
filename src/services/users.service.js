@@ -10,7 +10,8 @@ export const getUserFromDB = async (email)=>{
 
 export const createUserInDB = async (user)=>{
     const createdUser = await new User(user).save();
-    return createdUser._id;
+    console.log(createdUser);
+    return createdUser._doc._id;
 }
 
 export const updateUserInDB = async (id, user)=>{
