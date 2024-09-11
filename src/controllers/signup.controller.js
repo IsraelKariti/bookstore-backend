@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { encrypt } from '../utils/encryption.js';
 import { createUserInDB, getUserFromDB } from '../services/users.service.js';
 import { serverError, ok, badRequest } from '../utils/response.js';
 import dotenv from 'dotenv';
@@ -11,30 +11,25 @@ export const signup = async (req, res, next)=>{
 
     //1. check if this email exists
     const userFromDB = await getUserFromDB(email);
-    if(userFromDB.length > 0){
+    if(userFromDB != null && userFromDB.length > 0){
         badRequest(res, 'Email already exist');
     }
-
-    const saltRounds = 10;
+     
+    // create hash for password
     const password = req.body.user.password;
-    bcrypt.hash(password, saltRounds, async function(err, hash){
-        if(err!= null)
-            serverError();
+    const hash = await encrypt(password);
 
-        try{
-            const newUserID = await createUserInDB({email, hash});
-            const payload = {
-                email,
-                id: newUserID,
-                isAdmin: false,
-            };
-            const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '7d' });
-            ok(res, {token});
-        }
-        catch(e){
-            serverError(res,e);
-        }
-    })
-
-    
+    // create a token
+    try{
+        const newUserID = await createUserInDB({email, hash, isAdmin:false});
+        const payload = {
+            email,
+            isAdmin: false,
+        };
+        const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '7d' });
+        ok(res, {token});
+    }
+    catch(e){
+        serverError(res,e);
+    }
 }

@@ -5,4 +5,4 @@ import { validateLogin } from "../validators/login.validate.js";
 export const router = Router();
 
 // LOGIN WILL GET US A TOKEN
-router.get('/',validateLogin, login);
+router.post('/',validateLogin, login);

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getBook, getAllBooks, createBook, editBook, deleteBook } from "../controllers/books.controller.js";
-import { authenticateUser } from "../authenticators/admin.authenticator.js";
+import { authenticateUser } from "../authenticators/user.authenticator.js";
 import {validateBook}   from '../validators/book.validate.js';
 
 export const router = Router();

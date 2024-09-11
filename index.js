@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { Setting } from './src/models/settings.model.js';
 import { app } from "./app.js";
 import { connectToMongoDB, disconnetFromMongoDB } from './src/db/database.js';
 dotenv.config();
@@ -17,5 +18,3 @@ app.listen(PORT, async ()=>{
         process.exit(0);
     });
 });
-
-console.log('hwllo world'); 

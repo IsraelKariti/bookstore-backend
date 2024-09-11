@@ -17,7 +17,7 @@ export const userSchema = mongoose.Schema({
         unique: true,
         validate(val){
             if(!validator.isEmail(val))
-                throw new Error('email illagel');
+                throw new Error('email illegal');
         }
     },
     hash: {
@@ -32,6 +32,9 @@ export const userSchema = mongoose.Schema({
     },
     lastLoginDate: {
         type: Date
+    },
+    isAdmin: {
+        type: Boolean
     }
 });
 

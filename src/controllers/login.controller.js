@@ -1,18 +1,26 @@
+import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import { compareHash } from '../utils/encryption.js';
+import { badRequest, ok } from '../utils/response.js';
+import { getUserFromDB } from '../services/users.service.js';
+
 dotenv.config();
-const SECRET = process.env.SECRET_KEY;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-export const login = (req, res, next)=>{
-    const email = req.body.email;
-    const password = req.body.password;
+export const login = async (req, res, next)=>{
+    const email = req.body.user.email;
+    const password = req.body.user.password;
 
-    var jwt = require('jsonwebtoken');
+    const isPasswordCorrect = await compareHash(res, email, password);
+    if(!isPasswordCorrect)
+        badRequest(res, 'wrong password');
+
+    const userDetails = await getUserFromDB(email);
+
     const payload = {
-        email
+        email,
+        isAdmin: userDetails.isAdmin
     };
-    const token = jwt.sign(payload, SECRET_KEY);
-    console.log(token);
-    
+    const token = jwt.sign(payload, process.env.SECRET_KEY);
+    ok(res, {token});    
 }
