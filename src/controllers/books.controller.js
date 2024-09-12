@@ -22,10 +22,10 @@ export const getAllBooks = async (req, res)=>{
 }
 
 export const createBook = async (req, res)=>{
-    const bookInfo = req.body.book;
+    const bookInfo = req.body;
     try{
         const createdBook = await createBookInDB(bookInfo);
-        created(res, createdBook);
+        created(res, createdBook._doc);
     }
     catch(e){
         serverError(res, e);

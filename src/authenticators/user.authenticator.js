@@ -26,7 +26,7 @@ export const authenticateUser = (req, res, next)=>{
     }
 }
 
-export const authenticateAdmin = (req, res)=>{
+export const authenticateAdmin = (req, res, next)=>{
     const authHeader = req.headers['auth'];
     if(authHeader == null || !authHeader.startsWith('Bearer '))
         badRequest(res, 'access deined');
@@ -35,7 +35,6 @@ export const authenticateAdmin = (req, res)=>{
         const decoded = jwt.verify(token, SECRET_KEY);
         req.user = {
             email: decoded.email,
-            id: decoded.id,
             isAdmin: decoded.isAdmin
         }
         if(!decoded.isAdmin)
