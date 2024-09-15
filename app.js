@@ -7,7 +7,8 @@ import {router as loginRouter} from './src/routers/login.router.js';
 import {router as signupRouter} from './src/routers/signup.router.js';
 import {router as authorizationRouter} from './src/routers/authorization.router.js';
 import {router as settingsRouter} from './src/routers/settings.router.js';
-import { authenticateAdmin } from './src/authenticators/user.authenticator.js';
+import { initBooks } from './init.js';
+
 export const app = express();
 
 app.use(cors());
@@ -17,9 +18,11 @@ app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
 app.use('/verify', authorizationRouter);
 app.use('/users', usersRouter);
-app.use('/books', booksRouter);
+app.use('/books', booksRouter); // TODO: create pagination
 app.use('/settings', settingsRouter);
 
 app.all('*', (_,res)=>{  
     res.send('not found 404');
 });
+
+// initBooks();

@@ -7,8 +7,21 @@ export const getBookFromDB = async (bookId)=>{
 }
 
 export const getAllBooksFromDB = async ()=>{
-    const books = await Book.find();
+    const books = await Book.find({});
     return books;
+}
+
+export const getBookPagesByRangeFromDB = async (minPageIndex, maxPageIndex, pageSize)=>{
+    const numPages = maxPageIndex - minPageIndex + 1;
+    const numBooks = numPages * pageSize;
+    const toSkip = (minPageIndex-1) * pageSize;
+    try{
+        const books = await Book.find({}).skip(toSkip).limit(numBooks);
+        return books;
+    }
+    catch(e){
+        console.log(e);
+    }
 }
 
 export const createBookInDB = async (bookInfo)=>{
