@@ -1,4 +1,4 @@
-import {getBookFromDB, getAllBooksFromDB, getBookPagesByRangeFromDB, createBookInDB, editBookInDB, deleteBookInDB} from '../services/books.service.js';
+import {getBookFromDB, getAllBooksFromDB, getBookCountInDB, getBooksByRangeFromDB, createBookInDB, editBookInDB, deleteBookInDB} from '../services/books.service.js';
 import { ok, created, badRequest, serverError } from '../utils/response.js';
 
 export const getBook = async (req, res)=>{
@@ -21,6 +21,24 @@ export const getAllBooks = async (req, res)=>{
     }
 }
 
+export const getBookCount = async (req, res)=>{
+    try{
+        const count = await getBookCountInDB();
+        ok(res, {count});
+    }
+    catch(e){
+        serverError(res, e);
+    }
+
+}
+
+const convertOneBasedPagesToZeroBasedBooks = (startPage, endPage, pageSize)=>{
+    const startBook = (startPage-1)*pageSize;
+    const endBook = endPage*pageSize-1;
+    return {startBook, endBook};
+}
+
+// this function uses real page numbers (1-based indexes)
 export const getBooksByRange = async (req, res)=>{
     const start = Number(req.query.start);
     const end = Number(req.query.end);
@@ -35,7 +53,8 @@ export const getBooksByRange = async (req, res)=>{
     }
 
     try{
-        const books = await getBookPagesByRangeFromDB(start, end, size);
+        const {startBook, endBook} = convertOneBasedPagesToZeroBasedBooks(start, end, size);
+        const books = await getBooksByRangeFromDB(startBook, endBook);
         const pages = [];
         for (let i = 0; i < books.length; i += size) {
             const page = books.slice(i, i + size);

@@ -10,11 +10,14 @@ export const getAllBooksFromDB = async ()=>{
     const books = await Book.find({});
     return books;
 }
-
-export const getBookPagesByRangeFromDB = async (minPageIndex, maxPageIndex, pageSize)=>{
-    const numPages = maxPageIndex - minPageIndex + 1;
-    const numBooks = numPages * pageSize;
-    const toSkip = (minPageIndex-1) * pageSize;
+export const getBookCountInDB = async ()=>{
+    const countDocuments = await Book.countDocuments();
+    return countDocuments;
+}
+// this function uses 0-based index
+export const getBooksByRangeFromDB = async (minBookIndex, maxBookIndex)=>{
+    const numBooks = maxBookIndex - minBookIndex + 1;
+    const toSkip = minBookIndex;
     try{
         const books = await Book.find({}).skip(toSkip).limit(numBooks);
         return books;
