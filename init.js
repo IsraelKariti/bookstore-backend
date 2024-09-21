@@ -1517,7 +1517,7 @@ const bookOnTheFly = ()=>{
             ...book,
             price: Math.floor(Math.random() * (140 - 20 + 1)) + 20,
             rating: Math.floor(Math.random() * (5 - 1 + 1)) + 1,
-            imgPath: `https://www.picsum.photos/id/${index+1}/200/300`,
+            imgPath: `https://www.picsum.photos/id/${index+101}/200/300`,
         }).save();
     })
     return Promise.all(bookSavePromises);

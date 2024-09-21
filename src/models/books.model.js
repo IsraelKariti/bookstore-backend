@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const bookShcema = mongoose.Schema({
+export const bookShcema = mongoose.Schema({
     title: {
         type: String
     },

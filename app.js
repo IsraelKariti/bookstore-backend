@@ -8,8 +8,11 @@ import {router as signupRouter} from './src/routers/signup.router.js';
 import {router as authorizationRouter} from './src/routers/authorization.router.js';
 import {router as settingsRouter} from './src/routers/settings.router.js';
 import { initBooks } from './init.js';
+import { Book } from './src/models/books.model.js';
 
 export const app = express();
+
+const results = Book.find();
 
 app.use(cors());
 app.use(express.json());

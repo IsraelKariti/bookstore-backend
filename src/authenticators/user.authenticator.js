@@ -16,7 +16,7 @@ export const authenticateUser = (req, res, next)=>{
         const decoded = jwt.verify(token, SECRET_KEY);
         req.user = {
             email: decoded.email,
-            id: decoded.id,
+            // id: decoded.id,
             isAdmin: decoded.isAdmin
         }
         next();

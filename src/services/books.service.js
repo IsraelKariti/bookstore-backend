@@ -10,16 +10,16 @@ export const getAllBooksFromDB = async ()=>{
     const books = await Book.find({});
     return books;
 }
-export const getBookCountInDB = async ()=>{
-    const countDocuments = await Book.countDocuments();
-    return countDocuments;
+export const getBookCountInDB = async (searchTerm)=>{
+    const results = await Book.find({title: new RegExp(searchTerm)});
+    return results.length;
 }
 // this function uses 0-based index
-export const getBooksByRangeFromDB = async (minBookIndex, maxBookIndex)=>{
+export const getBooksByRangeFromDB = async (minBookIndex, maxBookIndex, searchTerm)=>{
     const numBooks = maxBookIndex - minBookIndex + 1;
     const toSkip = minBookIndex;
     try{
-        const books = await Book.find({}).skip(toSkip).limit(numBooks);
+        const books = await Book.find({title: new RegExp(searchTerm)}).skip(toSkip).limit(numBooks);
         return books;
     }
     catch(e){

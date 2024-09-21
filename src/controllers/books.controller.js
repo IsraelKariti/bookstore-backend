@@ -22,8 +22,9 @@ export const getAllBooks = async (req, res)=>{
 }
 
 export const getBookCount = async (req, res)=>{
+    const searchTerm = req.query.search;
     try{
-        const count = await getBookCountInDB();
+        const count = await getBookCountInDB(searchTerm);
         ok(res, {count});
     }
     catch(e){
@@ -43,6 +44,7 @@ export const getBooksByRange = async (req, res)=>{
     const start = Number(req.query.start);
     const end = Number(req.query.end);
     const size = Number(req.query.size);
+    const searchTerm = req.query.search;
     if(start < 1){
         badRequest(res, 'mininmum page index must equal or greater than 0');
         return;
@@ -54,7 +56,7 @@ export const getBooksByRange = async (req, res)=>{
 
     try{
         const {startBook, endBook} = convertOneBasedPagesToZeroBasedBooks(start, end, size);
-        const books = await getBooksByRangeFromDB(startBook, endBook);
+        const books = await getBooksByRangeFromDB(startBook, endBook, searchTerm);
         const pages = [];
         for (let i = 0; i < books.length; i += size) {
             const page = books.slice(i, i + size);

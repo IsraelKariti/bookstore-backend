@@ -21,6 +21,34 @@ export const updateUserInDB = async (email, user)=>{
     await User.findOneAndUpdate({email}, user);
 }
 
+const adjustBookAmountForUserInDB = async (email, bookId, delta)=>{
+    const result = await User.updateOne(
+        {email},// this filters the collection and retrieve a specific document
+        { $inc: {"cartItems.$[elem].amount": delta}},
+        {
+            arrayFilters:[
+                { "elem.bookId": bookId }
+            ]
+        }
+    );
+    return result;
+
+}
+
+export const increaseBookAmountForUserInDB = async (email, bookId)=>{
+    const result = await adjustBookAmountForUserInDB(email, bookId, 1);
+    if(result.modifiedCount != 1){
+        await User.updateOne(
+            {email},// this filters the collection and retrieve a specific document
+            { $push: {"cartItems": {bookId, amount:1}}},
+        );
+    }
+}
+
+export const decreaseBookAmountForUserInDB = async (email, bookId)=>{
+    await adjustBookAmountForUserInDB(email, bookId, -1);
+}
+
 export const removeUserInDB = async (id)=>{
     await User.findByIdAndDelete(id);
 }

@@ -2,7 +2,7 @@ import { bookSchema } from "../schemas/books.schema.js";
 
 export const validateBook = (req, res, next)=>{
     try{
-        bookSchema.validate(req.body.book);
+        bookSchema.validate(req.body);
         next();
     }
     catch(e){

@@ -12,8 +12,10 @@ export const login = async (req, res, next)=>{
     const password = req.body.user.password;
 
     const isPasswordCorrect = await compareHash(res, email, password);
-    if(!isPasswordCorrect)
+    if(!isPasswordCorrect){
         badRequest(res, 'wrong password');
+        return;
+    }
 
     const userDetails = await getUserFromDB(email);
 

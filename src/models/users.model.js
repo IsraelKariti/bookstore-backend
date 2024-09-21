@@ -27,6 +27,12 @@ export const userSchema = mongoose.Schema({
     phone: {
         type: Number,
     },
+    cartItems: {
+        type: [{
+            amount: Number,
+            bookId: { type: mongoose.Schema.Types.ObjectId, ref: 'Book'}
+        }],
+    },
     signUpDate: {
         type: Date,
     },
